@@ -11,6 +11,13 @@ function getResults(error, results){
 		console.error(error);
 	} else {
 		console.log(results);
+		let label = results[0].label;
+		let prob = results[0].confidence;
+		fill(0);
+		textSize(64);
+		text(label, 10, height - 100);
+		createP(label);
+		createP(prob);
 	}
 }
 
