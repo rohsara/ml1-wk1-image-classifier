@@ -2,14 +2,21 @@ let mobilenet;
 let puffin;
 let video;
 let label = '';
+let jsondata;
 const myVoice = new p5.Speech();
+const url = 'https://api.github.com/emojis';
+
+function preload(){
+	jsondata = loadJSON(url);
+}
 
 function setup() {
+	console.log('jsondata', jsondata)
 	createCanvas(640, 550);
 	// image classifier
 	// puffin = createImg("images/puffin.jpeg", imageReady);
 	// puffin.hide()
-
+	// loadJSON(url, modelReady);
 	// webcam image classification
 	video = createCapture(VIDEO);
 	video.hide();
@@ -23,7 +30,13 @@ function draw(){
 	fill(255);
 	textSize(32);
 	text(label, 10, height - 20);
+
+	if (label === 'mask') {
+		textSize(120);
+		text('😷', width / 2, height / 2);
+	}
 }
+
 
 function modelReady(){
 	console.log("Model is ready!!!");
@@ -33,6 +46,8 @@ function modelReady(){
 	// webcam example
 	// mobilenet.predict(gotResult);
 	classifyVideo();
+
+	
 }
 
 function classifyVideo(){
@@ -45,6 +60,14 @@ function gotResult(error, results){
 	} else {
 		// console.log(results); // slow things down
 		label = results[0].label;
+		const any = label.split(' ')
+
+		const keys = Object.keys(jsondata);
+		const emojiFind = keys.find(key => key.includes(label));
+		emojiFind ? createImg(jsondata[label]) : createImg(jsondata.confused)
+
+		// console.log(keys);
+		// const emojiFind = url.find()
 		// let prob = results[0].confidence;
 		// mobilenet.predict(gotResult)
 		// createP(label);
