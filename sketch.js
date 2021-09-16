@@ -28,16 +28,10 @@ function draw(){
 	textSize(32);
 	text(label, 10, height - 20);
 
-	if (label === 'mask') {
-		textSize(120);
-		text('😷', width / 2, height / 2);
-	}
-
-	// const emojiFind = keys.map(key => any.find( a => {
-	// 	a === key,
-	// 	createImg(jsondata[a])
-	// }));
-
+	// if (label === 'mask') {
+	// 	textSize(120);
+	// 	text('😷', width / 2, height / 2);
+	// }
 }
 
 function modelReady(){
@@ -58,18 +52,21 @@ function gotResult(error, results){
 		any = label.split(' ')
 		keys = Object.keys(jsondata);
 		
-		const emojiFind = keys.map(key => any.find( a => {
-			a === key,
-			createImg(jsondata[a])
+		const emojiFind = keys.map(key => any.find(a => {
+			a === key;
+			// createImg(jsondata[a]);
+			let img = createImg(jsondata[a], a);
+			img.position(width/2, height/2);
+			myVoice.speak(`I see ${a}`);
 		}));
 
 		// emojiFind ? createImg(jsondata[label]) : createImg(jsondata.confused)
 
-		// const emojiFind = url.find()
 		// let prob = results[0].confidence;
 		// createP(label);
 		// createP(prob);
-		myVoice.speak(`I see ${label}`);
-		classifyVideo();
+		// myVoice.speak(`I see ${label}`);
+		// classifyVideo();
+		setTimeout(classifyVideo, 2 * 1000);
 	}
 }
