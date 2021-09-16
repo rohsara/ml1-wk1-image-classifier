@@ -13,25 +13,21 @@ function preload(){
 
 function setup() {
 	// console.log('jsondata', jsondata)
-	createCanvas(640, 550);
+	// createCanvas(640, 550);
+	createCanvas(640, 120);
 	// webcam image classification
 	video = createCapture(VIDEO);
-	video.hide();
+	// video.hide();
 	// mobilenet = ml5.imageClassifier("MobileNet", modelReady); // image classifier ver
 	mobilenet = ml5.imageClassifier("MobileNet", video, modelReady); // webcam ver
 }
 
 function draw(){
 	background(0);
-	image(video, 0, 0);
+	// image(video, 0, 0);
 	fill(255);
-	textSize(32);
+	textSize(25);
 	text(label, 10, height - 20);
-
-	// if (label === 'mask') {
-	// 	textSize(120);
-	// 	text('😷', width / 2, height / 2);
-	// }
 }
 
 function modelReady(){
@@ -49,18 +45,20 @@ function gotResult(error, results){
 	} else {
 		// console.log(results); // slow things down
 		label = results[0].label; 
-		any = label.split(' ')
-		keys = Object.keys(jsondata);
-		
-		const emojiFind = keys.map(key => any.find(a => {
-			a === key;
-			// createImg(jsondata[a]);
-			let img = createImg(jsondata[a], a);
-			img.position(width/2, height/2);
-			myVoice.speak(`I see ${a}`);
-		}));
+		any = label.replace('-', ' ').replace(',', '').split(' ')
+		// keys = Object.keys(jsondata);
 
-		// emojiFind ? createImg(jsondata[label]) : createImg(jsondata.confused)
+		any.find(a => {
+			if(jsondata[a]){
+				let img = createImg(jsondata[a], a);
+				img.position(10, 10);
+				myVoice.speak(`I see ${a}`);
+			} else {
+				textSize(120);
+				text('😷', 10, 10);
+			}
+			
+		})
 
 		// let prob = results[0].confidence;
 		// createP(label);
