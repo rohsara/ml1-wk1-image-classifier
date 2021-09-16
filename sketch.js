@@ -1,5 +1,4 @@
 let mobilenet;
-let puffin;
 let video;
 let label = '';
 let jsondata;
@@ -11,12 +10,8 @@ function preload(){
 }
 
 function setup() {
-	console.log('jsondata', jsondata)
+	// console.log('jsondata', jsondata)
 	createCanvas(640, 550);
-	// image classifier
-	// puffin = createImg("images/puffin.jpeg", imageReady);
-	// puffin.hide()
-	// loadJSON(url, modelReady);
 	// webcam image classification
 	video = createCapture(VIDEO);
 	video.hide();
@@ -37,17 +32,9 @@ function draw(){
 	}
 }
 
-
 function modelReady(){
 	console.log("Model is ready!!!");
-	// used for image classification example
-	// mobilenet.predict(puffin, gotResult);
-
-	// webcam example
-	// mobilenet.predict(gotResult);
 	classifyVideo();
-
-	
 }
 
 function classifyVideo(){
@@ -59,25 +46,28 @@ function gotResult(error, results){
 		console.error(error);
 	} else {
 		// console.log(results); // slow things down
-		label = results[0].label;
+		// [
+		// 	0: {label: 'window screen', confidence: x.xxxxx}, 
+		// 	1: {label: 'windo shade', confidence: x.xxxx}, 
+		// 	2: {label: 'shoji', confidence: x.xxxx}
+		// ]
+		label = results[0].label; // label = 'ski mask'
 		const any = label.split(' ')
-
+		// console.log(any); // ['ski', 'mask']
 		const keys = Object.keys(jsondata);
-		const emojiFind = keys.find(key => key.includes(label));
-		emojiFind ? createImg(jsondata[label]) : createImg(jsondata.confused)
+		// console.log(keys); // array data of keys: ["100", "1234", ....]
+		// const emojiFind = keys.find(key => key.includes(label));
+		const emojiFind = keys.map(key => any.find( a => {
+			a === key,
+			createImg(jsondata[a])
+		}));
+		// emojiFind ? createImg(jsondata[label]) : createImg(jsondata.confused)
 
-		// console.log(keys);
 		// const emojiFind = url.find()
 		// let prob = results[0].confidence;
-		// mobilenet.predict(gotResult)
 		// createP(label);
 		// createP(prob);
 		myVoice.speak(`I see ${label}`);
 		classifyVideo();
 	}
 }
-
-// used for image classification example
-// function imageReady(){
-// 	image(puffin, 0, 0, width, height);
-// }
