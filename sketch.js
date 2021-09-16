@@ -1,6 +1,8 @@
 let mobilenet;
 let video;
 let label = '';
+let keys = '';
+let any = '';
 let jsondata;
 const myVoice = new p5.Speech();
 const url = 'https://api.github.com/emojis';
@@ -30,6 +32,12 @@ function draw(){
 		textSize(120);
 		text('😷', width / 2, height / 2);
 	}
+
+	// const emojiFind = keys.map(key => any.find( a => {
+	// 	a === key,
+	// 	createImg(jsondata[a])
+	// }));
+
 }
 
 function modelReady(){
@@ -46,21 +54,15 @@ function gotResult(error, results){
 		console.error(error);
 	} else {
 		// console.log(results); // slow things down
-		// [
-		// 	0: {label: 'window screen', confidence: x.xxxxx}, 
-		// 	1: {label: 'windo shade', confidence: x.xxxx}, 
-		// 	2: {label: 'shoji', confidence: x.xxxx}
-		// ]
-		label = results[0].label; // label = 'ski mask'
-		const any = label.split(' ')
-		// console.log(any); // ['ski', 'mask']
-		const keys = Object.keys(jsondata);
-		// console.log(keys); // array data of keys: ["100", "1234", ....]
-		// const emojiFind = keys.find(key => key.includes(label));
+		label = results[0].label; 
+		any = label.split(' ')
+		keys = Object.keys(jsondata);
+		
 		const emojiFind = keys.map(key => any.find( a => {
 			a === key,
 			createImg(jsondata[a])
 		}));
+
 		// emojiFind ? createImg(jsondata[label]) : createImg(jsondata.confused)
 
 		// const emojiFind = url.find()
